@@ -233,31 +233,229 @@ int main(void)
 
 
 
-    int i = 5;
-    int j = 1;
-    int k = 5;
+    // int i = 5;
+    // int j = 1;
+    // int k = 5;
   
-    while (i>0)
+    // while (i>0)
+    // {
+    //     while (j <i)
+    //     {
+    //         printf(" ");
+    //         j++;
+    //     }
+    //     while (k >=i)
+    //     {
+    //         k--;
+    //         printf("* ");
+    //     }
+    //     printf("\n");
+    //     i--;
+    //     j =1;
+    //     k =5;
+        
+        
+    // }
+
+
+    // int i = 1;
+    // int c= 0 ;
+    // int j = 0;
+    // // 마름모 상단
+    // while ( i <16)
+    // {
+    //     while (j++<16-i)
+    // {
+    //     printf(" ");
+    // }
+    //     while (c++<i)
+    // {
+    //     printf("* ");
+    // }
+    // printf("\n");
+    // c= 0;
+    // j=0;
+    // i=i+2;
+    // }
+
+
+    // // 마름모 하단
+    // i =13;
+    // c=0;
+    // j=0;
+    // while (i>0)
+    // {
+    //     while (j++<16-i)
+    //     {
+    //         printf("0");
+    //     }
+    //     while (c++<i)
+    //     {
+    //         printf("* ");
+    //     }
+    // printf("\n");
+
+    // c= 0;
+    // j=0;
+    // i=i-2;
+        
+        
+    // }
+    
+  
+   
+    
+// 모래시계 상단 위아래 반전 삼각형
+    // int i =13;
+    // int c=0;
+    // int j=0;
+    // while (i>0)
+    // {
+    //     while (j++<16-i)
+    //     {
+    //         printf(" ");
+    //     }
+    //     while (c++<i)
+    //     {
+    //         printf("* ");
+    //     }
+    // printf("\n");
+
+    // c= 0;
+    // j=0;
+    // i=i-2;
+        
+        
+    // }
+    //  i = 1;
+    //  c= 0 ;
+    //  j = 0;
+    // // 모래시계 삼각형
+    // while ( i <16)
+    // {
+    //     while (j++<16-i)
+    // {
+    //     printf(" ");
+    // }
+    //     while (c++<i)
+    // {
+    //     printf("* ");
+    // }
+    // printf("\n");
+    // c= 0;
+    // j=0;
+    // i=i+2;
+    // }
+
+
+
+
+    // int i = 1;
+    // int c= 0 ;
+    // int j = 0;
+    // // 삼각형
+    // while ( i <16)
+    // {
+    //     while (j++<16-i)
+    // {
+    //     printf(" ");
+    // }
+    //     while (c++<i)
+    // {
+    //     printf("* ");
+    // }
+    // printf("\n");
+    // c= 0;
+    // j=0;
+    // i=i+2;
+    // }
+// 직사각형
+//    int i = 5;
+//    int c = 0;
+//    int j = 5;
+//     while (i<16)
+//     {
+//         while (j++<15)
+//         {
+//             printf(" ");
+//         }
+//         while (c++<5)
+//         {
+//             printf("* ");
+//         }
+//         printf("\n");
+//         i = i+1;
+//         c = 0;
+//         j = 5;
+//     }
+    
+    int i = 1;
+    int c = 0 ;
+    int j = 0;
+    // 삼각형
+    while ( i <16)
     {
-        while (j <i)
-        {
-            printf(" ");
-            j++;
-        }
-        while (k >=i)
-        {
-            k--;
-            printf("* ");
-        }
-        printf("\n");
-        i--;
-        j =1;
-        k =5;
-        
-        
+        while (j++<16-i){
+        printf("0");
+    }
+        while (c++<i){
+        printf("* ");
+    }
+    printf("\n");
+    c= 0;
+    j=0;
+    i=i+2;
+    
     }
     
+//////////////
+     i = 1;
+     c = 5 ;
+     j = 19;
+    // 트리
+    while ( i <16)
+    {
+        while (j++<19-i){
+        printf("0");
+    }
+        while (c++<i){
+        printf("* ");
+    }
+    printf("\n");
+    c= 0;
+    j= 5;
+    i= i+3;
+    }
+        while (j++<19-i){
+        printf("0");
+    }
+        while (c++<i){
+        printf("* ");
+    }
+    c= 0;
+    j= 5;
+    i= i+3;
+        // printf("\n");
+    // //////////
+     i = 3;
+     c = 5 ;
+     j = 19;
 
-    
+    while ( i <16)
+    {
+        while (j++<19-i){
+        printf("0");
+    }
+        while (c++<i){
+        printf("* ");
+    }
+    printf("\n");
+    c= 0;
+    j= 5;
+    i= i+3;
+    }
+
+
+    // printf("\n");
     return 0;
 }
