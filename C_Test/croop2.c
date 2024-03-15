@@ -1,4 +1,4 @@
-//// sweetie2.c -- for 를 사용하는 카운팅 루프
+// // sweetie2.c -- for 를 사용하는 카운팅 루프
 // #include<stdio.h>
 // int main(void)
 // {
@@ -20,7 +20,7 @@
 //     printf("    n\t n의 세제곱\n");
 //     for (num = 1; num <= 6; num++)
 // // 위의 식을 아래식으로 대체할 수 있다.세제곱의 크기를 제한하고싶을 때 사용할 수 있는 방식이다.
-//// 이런식으로 검사조건을 활용할 수 있는 방법을 생각해보자
+// // 이런식으로 검사조건을 활용할 수 있는 방법을 생각해보자
 // // for(num = 1; num*num*num <=216; num ++)
 
 // //조건식      시작값   마지막값?  증가식
@@ -131,27 +131,27 @@
 //     return 0;
 // }
 
-// // rows2.c -- 의존적인 중첩루프를 사용한다.
-// #include<stdio.h>
-// int main(void)
-// {
-//     const int ROWS = 6;
-//     const int CHARS = 6;
-//     int row;
-//     int ch;
-//     for (row = 0; row < ROWS; row++)
-//     {
-//         for (ch  = ('A' + row); ch<('A'+CHARS); ch++)
-//         {
-//             printf("%c",ch);
+// rows2.c -- 의존적인 중첩루프를 사용한다.
+#include<stdio.h>
+int main(void)
+{
+    const int ROWS = 6;
+    const int CHARS = 6;
+    int row;
+    int ch;
+    for (row = 0; row < ROWS; row++)
+    {
+        for (ch  = ('A' + row); ch<('A'+CHARS); ch++)
+        {
+            printf("%c",ch);
             
-//         }
-//         printf("\n");
+        }
+        printf("\n");
         
-//     }
+    }
     
-//     return 0;
-// }
+    return 0;
+}
 // 문자열은 컴퓨터가 전체를 하나로 보고 
 // 문자배열은 하나하나의 요소를 다룰 수 있다.
 // 문자열의 요소를 수정할 때는 배열로 바꿔서 수정이 가능하게 만들어준다.
@@ -159,35 +159,35 @@
 
 
 
-// score.c -- 배열 처리에 루프를 사용한다.
-#include<stdio.h>
-#define SIZE 10
-#define PAR 72
+// // score.c -- 배열 처리에 루프를 사용한다.
+// #include<stdio.h>
+// #define SIZE 10
+// #define PAR 72
 
-int main(void)
-{
-    int index,score[SIZE];
-    int sum = 0;
-    float average;
+// int main(void)
+// {
+//     int index,score[SIZE];
+//     int sum = 0;
+//     float average;
 
-    printf("%d개의 골프 스코어를 입력하시오:\n", SIZE);
-    for (index = 0; index< SIZE; index++)
-    {scanf("%d", &score[index]); // 10개의 골프 스코어 읽기
-    }
-    printf("읽은 스코어들은 다음과 같다.\n");
-    for (index = 0; index <SIZE; index++)
-    {
-        printf("%5d", score[index]);
-    }
-    printf("\n");
-    for (index = 0; index <SIZE; index++)
-        {
-            sum+= score[index];//모두 더하기
-        }
-    average = (float)sum / SIZE; //평균구하기  sum을 명시적인 형변환을 해서 float으로 바꿔줌  
-    printf("스코어의 합 %d, 평균 = %2f\n", sum, average);
-    printf("핸디캡이 %0.1f이다.\n", average - PAR); 
-    //여기서 문자열을 읽어온건가? 문자배열이면 반복문으로 한번에 가져오고?
-    //  리스트와 반복문과 비슷한 내용이다. 문법이 달라졌다.
-    return 0;
-}
+//     printf("%d개의 골프 스코어를 입력하시오:\n", SIZE);
+//     for (index = 0; index< SIZE; index++)
+//     {scanf("%d", &score[index]); // 10개의 골프 스코어 읽기
+//     }
+//     printf("읽은 스코어들은 다음과 같다.\n");
+//     for (index = 0; index <SIZE; index++)
+//     {
+//         printf("%5d", score[index]);
+//     }
+//     printf("\n");
+//     for (index = 0; index <SIZE; index++)
+//         {
+//             sum+= score[index];//모두 더하기
+//         }
+//     average = (float)sum / SIZE; //평균구하기  sum을 명시적인 형변환을 해서 float으로 바꿔줌  
+//     printf("스코어의 합 %d, 평균 = %2f\n", sum, average);
+//     printf("핸디캡이 %0.1f이다.\n", average - PAR); 
+//     //여기서 문자열을 읽어온건가? 문자배열이면 반복문으로 한번에 가져오고?
+//     //  리스트와 반복문과 비슷한 내용이다. 문법이 달라졌다.
+//     return 0;
+// }
