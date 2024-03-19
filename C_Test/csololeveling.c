@@ -91,9 +91,9 @@ int main(void)
         float aa = ((rand()%(50-10+1)+10)*0.1); //이벤트
         exp_up = exp_up*aa ;
         printf("%d 이벤트 경험치\n", exp_up);
-        // if (exp_up <=0){
-        //     exp_up -=exp_up;
-        // }
+        if (exp_up <=0){
+            exp_up -=exp_up;
+        }
         turn += 1;
 
         exp += exp_up;
@@ -103,7 +103,7 @@ int main(void)
          {
             level++;/*레벨++*/
             exp = exp - exp_max;/*획득경험치는 레벨업 후 남은 값*/
-            if (level<5)/*99보다 작으면*/
+            if (level<99)/*99보다 작으면*/
             {
                 exp_max=EXP_MAX*exp_range;/*총 경험치 값 상승*/
                 printf("현재 경험치 %f 경험치 필요%f 레벨%d\n",exp,exp_max-exp,level);
@@ -115,19 +115,15 @@ int main(void)
         level--; 
         printf("현재 경험치량%f",exp);
         printf("다시 시도 하시겠습니까?(Y/N)\n");
-        if ( level >= 5){
+        if ( level >= 99){
         printf("===================축하합니다 레벨 99를 달성했습니다.====================\n");
         printf("%4d 레벨까지  %4d 턴이 걸렸습니다. \n", level,turn);
-        // scanf("%d", &num);
         break;
-        // continue;
         }
         else if (level <=0){
         printf("===================이런이런 망했네요 ㅜㅜ================================\n");
         printf("%d턴만에 이렇게 되어버리다니 ㅜㅜ\n", turn);
-        // scanf("%d", &num);
         break;
-        // continue;
         
         }
         // turn = 1;
