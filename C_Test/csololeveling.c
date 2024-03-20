@@ -90,7 +90,7 @@ int main(void)
 
         float aa = ((rand()%(50-10+1)+10)*0.1); //이벤트
         exp_up = exp_up*aa ;
-        printf("%d 이벤트 경험치\n", exp_up);
+        printf("%d 이벤트 경험치\n", exp_up);   
         if (exp_up <=0){
             exp_up -=exp_up;
         }
