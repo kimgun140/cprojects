@@ -212,9 +212,9 @@
     
 //     return 0;
 // }
-// main과 interchange는 메모리가 아예 다르다. 
-//전달인자를 사용하면 값을 넘겨주는거다 다시말하면 값을 복사해서
-// 다른 메모리에 넣어주는것이다. 값이 같은것이지 메모리 주소가 복사되는것이 아니다!!!!!!!
+// // main과 interchange는 메모리가 아예 다르다. 
+// // 전달인자를 사용하면 값을 넘겨주는거다 다시말하면 값을 복사해서
+// // 다른 메모리에 넣어주는것이다. 값이 같은것이지 메모리 주소가 복사되는것이 아니다!!!!!!!
 // void interchange(int u, int v)
 // {
 //     printf("교환 전 u = %d, v =%d\n", u,v);
@@ -231,25 +231,40 @@
 // temp = *u;는 u가 저장된 주소로 가서 값을 가져온다는 말이다. 
 // *u = *v는 u를 가지고 있는 주소에 v를 가지고 있는 주소의 값을 대입한다는 말이다!!!!
 // *은 간접연산자 indirection연산자 또는 역참조 dereferencing 연산자라고한다. 
+// #include<stdio.h>
+// void interchange(int* u, int* v);
+// int main(void){
+
+//     int x = 5, y=10;
+    
+//     printf("교환 전 x = %d, y =%d\n", x,y);
+//     interchange(&x,&y);
+//     printf("교환 후 x = %d, y = %d\n", x,y);
+    
+//     return 0;
+// }
+// void interchange(int* u, int* v)
+// {
+
+//     int temp;
+
+//     temp = *u;
+//     *u = *v;
+//     *v = temp;
+
+// }
+
+
+
 #include<stdio.h>
-void interchange(int* u, int* v);
+int x;
+
+x= 10;
 int main(void){
-
-    int x = 5, y=10;
     
-    printf("교환 전 x = %d, y =%d\n", x,y);
-    interchange(&x,&y);
-    printf("교환 후 x = %d, y = %d\n", x,y);
     
-    return 0;
 }
-void interchange(int* u, int* v)
-{
-
-    int temp;
-
-    temp = *u;
-    *u = *v;
-    *v = temp;
-
+void y(void){
+    x;
+    int z;
 }
