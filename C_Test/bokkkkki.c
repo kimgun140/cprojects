@@ -429,19 +429,22 @@ int main(void){
 }
 
 int usermapping( char* username,int(*usermovement)[2],int* turnptr)
-
+// username은 입력한 유저의 이름
+// usermovement 유저의 처음 시작 위치 
+// turnptr 다음 함수로 턴 받아서 옮겨주려고
 {
 if((usermovement[0][0]<0 || usermovement[0][0]>20) || (usermovement[0][1]<0 || usermovement[0][1]>20) ){
+    //맵 밖으로 나가지 않게 제한걸어주기
     printf("유저의 위치를 수정해야 합니다.\n");
     return -1;
 }
-char map[MAPSIZE][MAPSIZE];
-int movement=0;
+char map[MAPSIZE][MAPSIZE]; //MAPSIZE는 20 맵전체 크기
+int movement = 0; 
 for (int i = 0; i < MAPSIZE; i++)
 {
-    for (int j = 0; j < MAPSIZE; j++)
+        for (int j = 0; j < MAPSIZE; j++)
     {
-        map[i][j]='x'; 
+        map[i][j]='x'; // 맵에서의 위치 한 지점
     }
     
 }
@@ -453,13 +456,14 @@ printf ("%s가(이) 움직이고 싶은 방향을 골라주세요\n",username);
 printf("ex)위 오른쪽 왼쪽 아래\n");
 scanf("%s",userchoice);
 //왼쪽 -103 //오른쪽 -104 //위 -100 //아래 -107
-
+//문자의 아스키 코드 값을 받아서 하는건데.....
 switch (userchoice[1])
 {
     case -103://왼쪽
     usermovement[0][1]=usermovement[0][1]-1;
     printf("왼쪽 방향으로 캐릭터가 한칸 움직입니다.\n");
-    if(usermovement[0][1]<=-1){
+    if(usermovement[0][1]<=-1){ // 배열에서 -1은 한칸 이동을 의미한다. 왜? c언어에서의 배열을 설정하면 메모리가 1줄로 이어져있다.
+    // 그리고 배열의 크기를 설정하기 때문에 데이터크기를 설정하고 그것에 크기만큼 나눠져있다. -1에서 1이 나눠진 데이터 공간 크기이다. 
         usermovement[0][1]=0;
         printf("왼쪽 끝입니다.다른 방향으로 입력해주세요.\n");
         break;
@@ -474,7 +478,7 @@ case -104://오른쪽
         printf("오른쪽 끝입니다.다른 방향으로 입력해주세요.\n");
         break;
     }
-    movement++;
+    movement++; // 무브먼트가 1커지면 배열에서 한칸 움직인것이랑 같다. 
     break;
 case -100://위
     usermovement[0][0]=usermovement[0][0]-1;

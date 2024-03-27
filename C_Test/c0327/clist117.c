@@ -66,19 +66,19 @@ int main(void){
 //strcat 문자열 결합
 //strcmp 문자열 비교
 
-const char * list[LISTSIZE] = {
-    "astronomy", "astounding",
-    "astrophysics", "ostracize",
-    "asterism", "astrophobia"
-};
-int count = 0;
-int i;
-for (i = 0; i< LISTSIZE; i++)
-    if( strncmp(list[i], "astro", 5)==0){
-        printf("찾았다: %s\n", list[i]);
-        count++;
-    }
-    printf("astro로 시작하는 단어를 %d개""찾았다\n", count);
+// const char * list[LISTSIZE] = {
+//     "astronomy", "astounding",
+//     "astrophysics", "ostracize",
+//     "asterism", "astrophobia"
+// };
+// int count = 0;
+// int i;
+// for (i = 0; i< LISTSIZE; i++)
+//     if( strncmp(list[i], "astro", 5)==0){
+//         printf("찾았다: %s\n", list[i]);
+//         count++;
+//     }
+//     printf("astro로 시작하는 단어를 %d개""찾았다\n", count);
 
 
 
@@ -106,3 +106,63 @@ for (i = 0; i< LISTSIZE; i++)
 //     return ret_val;
 
 // }
+
+/*
+gets()
+getchar()
+사용자가 입력한 스트림에서 하나의 문자 아스키 코드값을 얻어오는 함수다.
+gets()
+표준 스트림 stdin에서 줄을 읽고 버퍼에 저장합니다. 줄은 첫번째 줄바꿈 문자까지 모든 문자로 구성된다.
+gets는 줄을 반환하기 전에 줄바꿈 문자를 null문자('\0')로 대체합니다. 반대로 fgets() 함수는 줄 바꿈 문자를 유지합니다. 
+
+
+******fgets(str, numchars, stream)******
+
+str 데이터 스토리지 위치
+numChars 읽을 최대 문자 수
+stream file구조체에 대한 포인터입니다.
+--MS-
+fgets()입력 stream인수에서 문자열을 읽어 str에 저장합니다 fgets는 현재 스트림 위치에서 첫 번째 줄 바꿈 문자,
+스트림의 끝 또는 읽은 문자 수가 1과 같은 numChars을 때까지 문자를 읽습니다. str에 저장된 결과는 null문자와 함께 추가 된다. 
+줄바꿈 문자는 읽을 경우 문자열에 포함됩니다. 
+
+-IBM-
+#include <stdio.h>
+char *fgets(char *string, int n , FILE *stream);
+fgets() 함수는 현재 stream 위치에서 어느 것이 먼저 오건 첫 번째 줄바꾸기 문자(\n)까지, 
+스트림의 끝까지 또는 읽은 문자 수가 n-1과 같을 때까지 문자를 읽습니다.
+fgets() 함수는 결과를 string에 저장하고 스트링 끝에 널(null)문자(\0)를 추가합니다.
+string은 줄 바꾸기 문자를 포함합니다(읽은 경우). n이 1이면 string이 비어있습니다.
+
+
+******fputs()******
+fputs() 함수는 string을 현재 위치의 출력 stream으로 복사합니다. 스트링 끝 null문자 (\0)를 복사하지 않습니다.
+
+
+
+
+******puts()******
+int puts( const char *str);
+매개 변수 : str 출력문자열
+설명: 이 함수는 puts 표준 출력 스트림 stdout에 기록 str하여 문자열의 종료문자 null문자("\0")를
+출력 스트림의 줄바꿈 문자 ("\n")로 바꿔줍니다.
+
+******gets()******
+#include<stdio.h>
+char *gets(char *buffer);
+gets() 함수는 표준 입력 스트림 stdin으로부터 행을 읽고, buffer에 저장합니다.
+행은 줄 바꾸기 문자(\n) 또는 eof(End Of File)를 포함하지 않지만 해당 문자까지 모든 문자로 구성됩니다.
+gets() 함수는 행을 리턴하기 전에 읽은 경우 줄바꾸기 문자를 null(\0)로 대체합니다.
+
+
+******strcmp()******
+#include <string.h>
+int strcmp(const char *string1, const char *string2);
+strcmp() 함수는 sring1과 string2를 비교합니다. 함수는 null로 끝나는 스트링에서 작동합니다.
+함수에 대한 스트링 인수는 스트링 끝을 나타내는 널문자 (\0)를 포함해야합니다.
+리턴값이 0보다 작으면 string1이 string2보다 작음
+0보다 작으면 string1이 string2와 같음
+0보다 크면 string1이 string2보다 큼
+
+
+*/
