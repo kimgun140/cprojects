@@ -98,7 +98,17 @@ struck book gift = {
 library[0].value 첫 번째 배열 원소와 관련된 value멤버 
 library[2].title[4]
 이것은 세 번째 구초에 library[2]가 나타내는 책의 타이틀에 있는 다섯 번째 문자(title[4])이다. 
+libary[2].title[4]
+는 세번째 구초제가 나타내는 책의 타이틀에 있는 다섯 번째 문자이다. 
+도트 연산자의 오른쪽 인덱스는 개별 멤버에게 적용되는 것이고 왼쪽 인덱스는 구조체의 배열에 적용된다. 
+library  book구조체의 배열
+library[2] 배열의 한 원소, 그러므로 하나의 book 구조체
+library[2].title char형 배열, (library[2]의 title 멤버)
+library[2].title[4] title멤버 배열의 한문자
 
+-----------------------
+프로그램 설명 
+여러 권의 책을 입력 받기 위해 루프를 사용했다. 
 
 
 
