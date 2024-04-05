@@ -42,10 +42,10 @@ typedef struct fourth_depend_table
 
 struct potion_table
 {
-    int redpotion[2];/*빨간 물약*/
-    int orangepotion[2];/*주황 물약*/
-    int purepotion[2];/*맑은 물약*/
-    int highpotion[2];/*고농도 물약*/
+    int redpotion;/*빨간 물약*/
+    int orangepotion;/*주황 물약*/
+    int purepotion;/*맑은 물약*/
+    int highpotion;/*고농도 물약*/
 }potion_table;
 struct scroll_table
 {
@@ -78,5 +78,6 @@ typedef struct Boki
     int gold;
     int damage;
     int def;
+    struct item_table consume;
     equipment bokiEquipment;
 }Boki;
