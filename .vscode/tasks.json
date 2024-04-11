@@ -48,7 +48,7 @@
         //gcc c compiler config. part
         { 
             "label": "save and compile for C",
-            "command": "gcc",
+            "command": "g++",
             "args": [
                 "-g",
                 "${file}",
