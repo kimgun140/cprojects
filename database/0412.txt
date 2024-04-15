@@ -1,0 +1,78 @@
+DBMS
+Databasa Management System 데이터베이스 관리 시스템
+
+Query
+질문. DB에 데이터를 요구하기 위한 문장을 의미
+
+Transaction
+DB의 기본적인 작업 단위, 조작하고 통제하는 작업의 단위.
+
+Commit, Rollback
+트랜잭션들을 적용할지, 이전단계로 돌아갈지 정하는 것
+
+Primary Key
+Table에서 데이터를 대표하는 속성, 비어있어도 안되고 중복되지도 않는다. 
+
+
+Foregin Key 
+다른 Table의 기본키
+
+Normalization
+관계형 DB에서 중요한 데이터 절약 및 관계형 DB의 관계를 구성하는 틀
+
+DBMS안에 여러 DB가 존재 할 수 있으며 내부에는 여러 Table들이 존재한다
+여러사용자가 특정db의 권한을 받아 여러 Tabl에 대하여 해당권한 만큼 사용할 수 있다.
+table은 서로 관계를 형성하며 이를 위해 정규화 과정을 거치고 나눠 용량을 절약할 수 있다.
+server에 DB를 두고 원격으로 client가 접솟하여 여러면이 하나의 DB르 공유할 수 있음
+
+Structured Query Language db를 다루기 위한 언어
+
+
+명령어는 소문자로 써도 된다. 하지만 이름은 대문자로 만들었으면 그건 대문자로 써서 구분해줘야한다.
+마리아db는 테이블이름에서 대소문자 구분한다.
+
+
+외래키로 다른 테이블과의 관계를 통해 정보를 알 수 있다.
+
+
+LIKE 문법
+'%'
+문자의 형태와 길이를 제한하지 않는 와일드 카드, 특정 문자 앞에 있을 경우 그 문자 앞으로만 적용되며 반대로도 가능
+ex) SELECT * FROM EMP WHERE NAME LIKE '&AR%';
+
+'_'
+문자의 형태는 사오간 없지만 길이는 1개로 제한하는 와일드 카드, %와 똑같이 사용되나
+_하나당 한 문자로 매칭 시킬 수 있다. '_'이 여러개면 그만큼 글자수 
+EX) SELECT * FROM EMP WHERE NAME LIKE '%AR_';
+
+AND, OR,NOT, XOR 
+SELECT * FROM WHERE ENAME = 'ALLEN' AND SAL =1100;
+SELECT * FROM EMP WHERE ENAME NOT LIKE '%AR%';
+SELECT *FROM EMP WHERE ENAME = 'ALLEN' XOR SAL = 1100;
+SELECT * FROM EMP WHERE ENAME = 'ALLEN' XOR SAL = 1600;
+
+
+
+ORDER BY 문법:
+생각과 결과와는 다르게 데이터는 순서대로 저장되지 않는다.
+기본형 >>
+SELECT {COLUMNS명} FROM {TABLE명}[ORDER BY {COLUMNS명}[추가조건]]
+SELECT * FROM EMP ORDER BY ENAME; /OR/ ORDER BY JOB, SAL;
+SELECT * FROM EMP ORDER BY HIREDATE;
+:시간값도 비교가 가능하다.
+SELECT * FORM EMP ORDER BY ENAME DESC; DESC(거꾸로 DE)
+SELECT * FROM EMP LIMIT 5;
+SELECT * FROM ORDER BY ENAME LIMIT 5; 
+문법상 ORDER BY 보다 LIMIT이 더뒤로 와야한다. 
+몇개만 뽑을 건지(LIMIT )
+
+
+검색 범위 지정
+OFFSET,LIMIT
+LIMIT : 최대 출력을 조정
+OFFSET : 시작지점을 조정
+SELECT * FROM EMP LIMIT 3 OFFSET 3;
+순서에 주의
+SELECT * FROM EMP ORDER BY ENAME LIMIT 3 OFFSET 3;
+또한 순서에 주의
+SELECT * FROM EMP WHERE SAL > 1100 ORDER BY ENAME LIMIT 3 OFFSET 3;
