@@ -5,9 +5,10 @@
 #include"solost.h"
 #define EXP_MAX 30000       //1레벨 최대 경험치
 solo_level_up solo;
+using namespace std;
 int main(void)
 {
-    using namespace std;
+  
 
     srand((unsigned)time(NULL));
     // char name [20];         //캐릭터 이름
@@ -39,8 +40,9 @@ int main(void)
     puts("■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■");
                 
 
-    printf("\n게임을 시작합니다.\n이름을 입력해주세요: ");
-    scanf("%s", solo.name);      //이름 입력
+    // printf("\n게임을 시작합니다.\n이름을 입력해주세요: ");
+    cout << "\n게임을 시작합니다.\n이름을 입력해주세요: ";
+    cin >> solo.name;      //이름 입력
 
     while (1)
     {
@@ -71,7 +73,7 @@ int main(void)
             }
             else            //99레벨이면 게임 승리
             {
-            printf("===================축하합니다 레벨 99를 달성했습니다.====================\n");
+           cout << "===================축하합니다 레벨 99를 달성했습니다.====================\n";
             printf("\n%s의 현재 경험치 %.2f/%.2f 레벨%d 턴%d\n",solo.name,solo.exp,solo.exp_max,solo.level, solo.turn);
             printf("다시하겠습니까?(진행할려면 1을 종료할려면 2를 입력): ");
             scanf("%d",&solo.go);
