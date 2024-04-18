@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include<iostream>
 typedef struct solo_level_up
 {
     char name[20];
@@ -12,3 +13,5 @@ typedef struct solo_level_up
     float event;
     int go;
 }solo_level_up;
+
+

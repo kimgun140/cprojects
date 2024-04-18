@@ -3,7 +3,7 @@
 
 using namespace std;
 bool Point::InitMembers(int Xpos, int ypos)
-{
+{ 
     if (Xpos < 0 || ypos < 0)
     {
         cout << "벗어난 범위의 값 전달" << endl;

@@ -1,26 +1,44 @@
 
+#include <string>
 #include <time.h>
-#include "solost.h"
 #include <iostream>
-using namespace std;
-solo_level_up solo;
+#include "solost.h"
 #define EXP_MAX 30000 // 1레벨 최대 경험치
-// int start(solo_level_up & solo);
-int power_level_up(solo_level_up &solo)
+solo_level_up solo;
+int power_level_up(solo_level_up& solo);
+using namespace std;
+int main(void)
 {
     srand((unsigned)time(NULL));
-    // 새 기능 뭐 하지 레벨 한방에 99되게 만들어야겠다
-    // 랜덤으로 100분이 1확률로 레벨 99되기
-    if (rand() % 101 == 1)
-    {
-        cout << "여기야 여기!!";
-        solo.level = 99;
-    }
-    // return 0;
-}
-int start(solo_level_up &solo)
-{
-    srand((unsigned)time(NULL));
+    // char name [20];         //캐릭터 이름
+    // float exp = 0;          //현재 경험치
+    // int exp_up = 0;         //경험치 증가량
+    // int turn = 0;           //턴
+    // int level = 1;          //레벨
+    // float exp_max = 30000;  //최대 경험치
+    // float prev_max = 0;     //이전 레벨 최대 경험치
+    // float exp_range;        //최대경험치 증가량 배수
+    // float event;            //경험치 증가량 배수
+    // int go;                 //프로그램 종료를 물어보는 변수
+
+    puts("■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■");
+    puts("□                                                                       □");
+    puts("■                                                      고고 키티 건     ■");
+    puts("□                          __,,,,_                   \t\t\t□");
+    puts("■            _ ___.--'''`--''// ,-_ `-.              \t\t\t■");
+    puts("□        \\`\"' ' |  \\  \\ \\/ / // / ,-  `,_            \t\t\t□");
+    puts("■       /'`  \\   |  Y  | \\|/ / // / -.,__ `-.        \t\t\t■");
+    puts("□      /<\"\\    \\ \\  |  | ||/ // | \\/    |`-._`-._    \t\t\t□");
+    puts("■     /  _.-.  .-\\,___|  _-| / \\ \\/|_/  |    `-._    \t\t\t■");
+    puts("□     `-'  f/ |       / __/ \\__  / |__/ |            \t\t\t□");
+    puts("■          `-'       |  -| -|\\__ \\  |-' |            \t1. 시작하기\t■");
+    puts("□                 __/   /__,-'    ),'  |'            \t\t\t□");
+    puts("■                ((__.-'((____..-' \\__,'             \t2. 종료하기\t■");
+    puts("□                                                                       □");
+    puts("■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■  □  ■");
+
+    cout << "\n게임을 시작합니다.\n이름을 입력해주세요: ";
+    cin >> solo.name; // 이름 입력
 
     while (1)
     {
@@ -102,5 +120,19 @@ int start(solo_level_up &solo)
         cout << solo.name << "의 현재 경험치 " << solo.exp << "/" << solo.exp_max << "       " << solo.level << "레벨" << solo.turn << "턴\n";
         // 턴이 진행될 때 마다 확인할 수 있게 출력
     }
-    return solo.go;
+    cout << "종료되었습니다.\n";
+
+    return 0;
+}
+
+int power_level_up(solo_level_up& solo)
+{
+    // 새 기능 뭐 하지 레벨 한방에 99되게 만들어야겠다
+    // 랜덤으로 100분이 1확률로 레벨 99되기
+    if (rand() % 2 == 1)
+    {
+        cout << "여기야 여기!!";
+        solo.level = 99;
+    }
+    return 0;
 }
