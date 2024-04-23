@@ -1,0 +1,114 @@
+데이터타입을 제대로 설정하지 않으면 문제가 생긴다 메모리공간이 엄청 많이 필요해지거나
+검색의 속도 따위가 느려진다.
+사전에 데이터를 설계해야한다.
+
+SQL 기본 문법 : DATATYPE /194
+정수형
+INT:2147483648-2147483647의 범위를 가짐. UNSINGED를 조건으로 두배를 갖는다.
+(2의 32제곱, 32BIT, 4BYTES)
+BIGINT: INT보다 2제곱 많이 , 즉 , 2의 64제곱의 수를 대상으로 
+(64BIT, 8BYTE)
+
+MEDIUMINT: -8388608~8388607 사이의 수를 대상으로 하며 또한 UNSIGNED 조건이 존재한다.
+(24BIT, 3BYTES);
+
+SMALLINT: -32768~32767 사이의 수를 대상으로 하며 또한 UNSIGNED 조건이 존재한다.
+(16BIT, 2BYTES)
+
+TYNYINT: -127~127 사이의 수
+(8BIT, 1BYTES)
+
+BOOL: TRUE와 FALSE만 저장할 때 그렇다고 1BIT만 사용하지않는다. 1BYTES 저장 할 수 있지만 0아닌 수는 모두 TRUE로 한다.
+너비로 저장 값에 제한을 줄 수 있으나 데이터 저장을  만들지 않는다. 
+Ex) 10만을 저장하기 위해서 INT 너비를 제한 하더라도 저장공간은 4BYTES가 된다. 
+
+
+실수형 (부동 소수점)
+FLOAT: 총 4BYTES의 수를 이용하여 소수점 이하 7자리까지의 정밀도를 제공하는 소수점을 나태는 타입.
+7자리가 넘어가는 수를 입력할 경우 나머지 자리수는 버린다. 근사값이므로 실제 값과 차이가 발생할 수 있다. 
+
+DOUBLE 총 8BYTES의 수를 이용하여 소수점 이하 15자리까지의 정밀도를 제공하는 소수점을 나타내는 타입. 이하 FLOAT와 같다.
+
+실수형(고정 소수점)
+DECIMAL
+가변적인 형태의 용량을 저장하는 5~17BYTES의 타입. 최대 65자리에서 소수점 자리수 (최대 30자리)를 지정하여 고정적으로
+소수점을 지정할 때 사용한다. 부동소수점과 다르게 근사값이 아니기 때문에 정확한 값을 저장할 순 있으나 정확도가 높아질수록 BYTES수가 증가므로
+주의해야한다. 때문에 생성시 총 자리수와 소수점 이하의 자리수를 각각 지정해줘야하낟. DEFAULT값은 (10,0)[10자리수 중 소수점 이하는 0개]이다.
+정수값은 자리수를 넘어갈 경우 에러, 소수점 자리수를 넘어갈 경우 입력한 자리수 앞에서 반올림된다. 
+
+
+
+
+SQL기본문볍
+문자열 타입
+CHAR(M)[CHARACTER SET{SET명}]: 문자열 데이텅 타입으로, 입력할 데이터셋(utf8, utf16 과 같은)과 길이에 따라 크기가 달라진다.
+char타입은 고정 길이이므로 그보다 작은 공백이 채워진다. 최대255글자까지 가능하다. 
+
+VARCHAR[CHARCTER SET{Set명}] : CHAR와 같지만 65535길이의 글자까지 가능하다. 또한 CHAR와 다르게 고정길이가 아닌 가변길이로 이를 위해 1~2bytes의 길이를 나타내는 추가용량이 필요하다.
+
+BINAYR/ VARBINARY
+
+
+SQL기본 문법
+
+날짜 시간 타입
+date 
+yyyy-mm-dd,yy-mm-dd,yyyymmdd,yymmdd 입력가능
+
+time타입
+hh:mm:ss 시간타입을 입력하여 사용한다. 24시간 이상의 시간도 저장이 가능하다.
+
+timestamp
+1970-01-01 00:00:01qnxj 2038-01-19 03:24:07까지 범위를 가지는 날짜와 시간을 합친 시간 타입
+unix시간을 이용할 수 있다 utc시간을 적용할 때 편한다. 소수점 이하에 대한 조건을 추가할 경우 소수점 이하 6자리의 정밀도를 추가할 수 있다.
+
+datetime
+1000-01-01 00:00:00~ 9999-12-31 23:59:59의 범위를 갖는다.
+
+
+SQL 기본 문법 delete
+-DELETE FROM {Table명} [WHERE {조건식}] [ORDER BY {속성명} [추가조건]]
+[LIMIT {INT}];
+DELETE FROM EMP WHERE ENAME IS NULL;
+START TRANSACTION;(AUTO COMMIT을 잠시 비활성)
+DELETE FROM EMP;
+SELECT * FROM EMP;
+ROLLBACK;
+: 조건없이 사용하게되면 큰일 날 수 있음.
+
+START TRANSACTION;
+DELETE FROM EMP WHERE ENAME = ‘SAM’;
+COMMIT;
+: COMMIT을 해야만 적용이 됨. 실수를 예방할 수 있음. 기본적으로 AUTO
+COMMIT이 적용되어있음.
+
+
+-UPDATE {Table명} SET {적용 속성명} = {변경 값} [조건식];
+: UPDATE EMP SET COMM = 100 WHERE COMM IS NULL;
+: UPDATE EMP SET COMM = NULL WHERE COMM = 100;
+
+-START TRANSACTION;
+UPDATE EMP SET COMM = 100;
+SELECT * FROM EMP;
+ROLLBACK;
+: UPDATE 또한 DELETE와 마찬가지로 조건을 잘 지정해줘야한다.
+
+
+
+
+
+
+TABLE을 관리하는 SQL
+-이전 시간에 TABLE 내부에 의 data를 crud하는 방법에 대해서 공부함.
+-또한, data 이상의 table 자체를 만들고 제거하고 수정할 수 있다.
+-이를 위해 명령어가 존재한다.
+
+제약 조건:
+특정 속성에 추가적으로 부여한느 조건으로 이를 충족하지 못하면 생성되지 못하도록 
+걸어두는 일종의 제약으로ㅓ. 오류를 줄이고 잘못된 data가 입력되는 경우를 없애준다ㅏ.
+또한 , 특정 제약을 통해서 성능에 도움을 줄 수 있다.
+제약조건 작성 방법
+속성을 작성할 때 바로 뒤에 붙여
+
+NOT NULL:
+NULL 값을 허용하지 않는 제약 조건 , 속성 뒤에 바로 이어서 작성한다.

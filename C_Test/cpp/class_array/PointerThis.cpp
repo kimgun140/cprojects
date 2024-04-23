@@ -16,6 +16,7 @@ class SoSimple{
     }
     SoSimple * GetThisPointer(){
         return this;
+        //this 포인터로 이 객체의 주소값을 반환하고 있다. 
     }
 
 };

@@ -1,3 +1,7 @@
+sudo service mysql start;
+sudo mariadb -u root;
+TEST USE;
+
 DBMS
 Databasa Management System 데이터베이스 관리 시스템
 
@@ -76,3 +80,96 @@ SELECT * FROM EMP LIMIT 3 OFFSET 3;
 SELECT * FROM EMP ORDER BY ENAME LIMIT 3 OFFSET 3;
 또한 순서에 주의
 SELECT * FROM EMP WHERE SAL > 1100 ORDER BY ENAME LIMIT 3 OFFSET 3;
+
+
+UNIQUE
+중복을 허용하지 않는다. 이미 존재하는 값을 입력시 적용되지 않도록 합니다.
+CREATE TABL TEMP (ID INT NOT NULL UNIQUE, NAME VARCHAR(15) DEFAULT 'DEFAULT');
+
+
+CHERCK
+사전에 조건을 주어 참인 경우에만 허용한다.
+CREATE TABLE TEMP (ID INT NOT NULL UNIQUE CHERCK (ID>0),NAME VARCHAR(15) DEFAULT 'DEFAULT');
+CREATE TABLE TEMP (ID INT NOT NULL UNIQUE, NAME VARCHAR(15) DEFAULT 'defalut', CONSTRAINT TEMP_CH CHECK(ID > 0));
+ID가 0이상만 가능하다. 라는 조건을 주었다.
+
+Primary KEY(기본키)
+테이블의 행(TUPLE)을 유일하게 가리킬 수 있게 해주는 KEY를 지정하는 제약 조건 . 이 TUPLE이
+식별되도록 기준이 되는 속성이여야하며, 유일성과 최소성을 만족해야 한다.
+
+CREATE TABLE TEMP (ID INT PRIMARY KEY CHECK (ID > 0), NAME VARCHAR(15) DEFAULT'DEFAULT');
+
+CREATE TABLE TEMP (ID INT CHECK(ID > 0), NAME VARCHAR(15)DEFAULT 'defalut', CONSTRAINT PK_TEMP PRIMARY KEY(ID));
+마리아 DB에서는 최초로 NOT NULL에 UNIQUE인걸 자동으로 PRIMARY키로 설정해준다. 별도의 설정없으면 
+PRIMARY키는 이미 NOT NULL이랑 UNIQUE 기능을 갖는다 .
+
+
+FOREGIN KEY (외래키)
+다른 테이블의 기본키 해당 테이블의 유일성을 유지해주지는 않으나, 
+테이블 간의 관계를 형성할 떄 조건을 사용하여 무결성을 유지시켜준다.
+관계 테이블의 기본키가 가지지 않은 외래키 값으로 넣을 수 없음.
+
+CREATE TABLE TEMP_FK (ID INT PRIMARY KEY, PID INT, FOREIGNKEY(PID) REFERANCE TEMP(ID));
+
+
+CREATE TABLE TEMP_FK (ID INT PRIMARY KEY, PID INT, CONSTRAINT FK_TEMP FOREIGN KEY(PID) REFERENCES TEMP(ID));
+
+ON DELETE [RESTRICT | CASCADE | NO ACTION | SET NULL]
+ON UPDATE [RESTRICT | CASCADE | NO ACTION | SET NULL]
+
+RESTRICT : 외래키의 관꼐에 해당하는 개체가 사라질 수 있는 경우 이를 사전에 경고,막는다. 
+외래키를 생성할 떄 다른 조건을 주지않으면 RESTRICT가 설정된다. 
+CASCASE: 외래키의 관계에 해당하는 개체가 사라질 경우 이와 관련된 외래키를 가진 데이터를 같이 변경, 삭제된다. 
+
+NO ACTION 문제가 발생하더라도 무시한다. (어지간하면 잘안쓴다. )
+
+SET NULL: 외래키의 관계에 해당하는 개체가 사라질 경우 이와 관련된 외래키를 가진 데이터를 모두 NULL로 대체한다. 
+이경우 NOT NULL과 같이 사용할 수 없다. 
+
+TABLE 속성변경
+ALTER
+
+
+
+기본 함수(문자)
+LOWER/UPPER
+SELECT LOWER('abcDEF');
+SELECT UPPER ('ASDFasdf');
+
+SUBSTR(대상,OFFSET,[LIMIT])
+:부분문자열을 출력하는 함수
+SELECT SUBSTR('123456',2,4);
+
+LENGTH(대상)
+:문자의 길이를 출력
+SELECT LENGTH('123456');
+
+INSTR(대상, 찾는 문자열)
+:대상이 되는 문자열을 찾아 시작되는 문자의 위치값을 반환
+SELECT INSTR('REFERENCES', 'E'); 
+가장 먼저 나오는게 나온다.
+
+LPAD/RPAD(대상, 총자리수, [채울 문자열])
+문자를 주어진 자리수만큼 늘리며 채울 문자열을 비는 자리에 채운다. 총자리수가 대상보다 짧으면
+아무 적용이 되지 않으며 채울 문자열의 기본값은 ''이다. 각각 공백을 채울 때 왼쪽부터 채우는가, 오른쪾을 채우는가 차이다.
+SELECT LPAD('12345'7,'A')// SELECT RPAD('1234567',7,'A')
+설정된 공간이 더 적으면 설정된 공간만큼 잘라서 출력하낟.
+CONCAT(대상1, 대상2)
+문자르
+SELECT CONCAT ('HELLO;,CONAT(', ', 'WORLD!'));
+
+REPLACE ('대상', '바뀌는 단어','적용할 단더')
+대상에서 특정 문자를 다른 문자로 바꾼다.
+SELECT REPLACE('123456','123','ABC');
+
+기본함수 (숫자)
+ROUND(대상, [자리수])
+자리수가 없다면 정수부 까지 반올림한다. 자리수가 있을 경우 자리수 이전에 반올림을 한다.
+
+TRUNCATE(대상,자리수)
+자리수 이전에 버림한다. ROUND함수와 다르게 자리수가 필수이다.
+
+CEIL/FLOOR(대상)
+:가장 가까운 큰/작은 정수를 반환
+
+

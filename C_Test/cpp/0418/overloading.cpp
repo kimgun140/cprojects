@@ -1,0 +1,28 @@
+#include<iostream>
+using namespace std;
+class Point{
+    private:
+    int xpos, ypos;
+    public:
+    Point(int x= 0, int y = 0) : xpos(x), ypos(y)
+    { }
+    void ShowPosition() const{
+        cout << '['<<xpos<<","<<ypos<<']'<<endl;
+    }
+    Point operator+(const Point &ref){ // operator 연산자를 붙이면 연산자르 이용한 함수의 호출도 허용해준다. 
+        Point pos(xpos+ref.xpos, ypos+ref.ypos);
+        return pos;
+    }
+};
+int main(void){
+    Point pos1(3,4);
+    Point pos2(10,20);
+    Point pos3 = pos1.operator+(pos2);
+    Point pos4 = pos1+pos2;
+
+    pos1.ShowPosition();
+    pos2.ShowPosition();
+    pos3.ShowPosition();
+    pos4.ShowPosition();
+    return 0;
+}
