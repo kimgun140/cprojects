@@ -52,6 +52,9 @@
         "typeinfo": "cpp",
         "cstring": "cpp",
         "fstream": "cpp",
-        "solost.h": "c"
+        "solost.h": "c",
+        "string.h": "c",
+        "inet.h": "c",
+        "socket.h": "c"
     }
 }
