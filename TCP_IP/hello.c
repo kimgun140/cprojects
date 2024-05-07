@@ -20,13 +20,13 @@ int main(int argc, char *argv[])
     }
 
     struct in_addr{
-        in_addr_t       s_addr;     32비트 ipv4 인터넷 주소 
+        in_addr_t       s_addr;     32비트 ipv4 인터넷 주소
     }
     */
     struct sockaddr_in clnt_addr;
     socklen_t clnt_addr_size;
 
-    char message[] = "기모띠!";
+    char message[] = "ㅎㅇ!";
     if (argc != 2)
     {
         printf("Usage : %s <port>\n", argv[0]);
@@ -49,15 +49,16 @@ int main(int argc, char *argv[])
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     // 32비트 ip주소정보 저장
     // 네트워크 바이트 순서로 저장
-    //  멤버 sin_addr의 구조체 자료형 in_addr 사실상 32비트 정수자료형
+    // 멤버 sin_addr의 구조체 자료형 in_addr 사실상 32비트 정수자료형
     serv_addr.sin_port = htons(atoi(argv[1]));
     // 32비트 ip주소 정보 저장
     // 네트워크 바이트 순서로 저장
     // 멤버 sin_addr의 구조체 자료형 in_addr 사실상 32비트 정수자료형
     // 주소 받기
     if (bind(serv_sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == -1)
-        // 구조체 변수 sockaddr_in은 bind 함수의 인자로 전달되는데, 매개변수 형이 sockaddr이므로 형 변황을 해야만 한다. 
-
+        //
+        // 구조체 변수 sockaddr_in은 bind 함수의 인자로 전달되는데, 매개변수 형이 sockaddr이므로 형 변황을 해야만 한다.
+        // 문자열로 입력한 바이트와 포트를 비트로 빅엔디안 방식으로 변환해 바인드를 해준다.
         error_handling("bind() error");
     // 연결대기
     if (listen(serv_sock, 5) == -1)

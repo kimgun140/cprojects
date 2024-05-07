@@ -16,7 +16,11 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-I/usr/include/mariadb",
+                "-I/usr/include/mariadb/mysql",
+                "-L/usr/lib/x86_64-linux-gnu/",
+                "-lmariadbcpp"
 				// (opt) 특정 컴파일러 버전 선택
 				//, "-std=gnu++11"
             ],
@@ -54,6 +58,7 @@
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
+
             ],
             "group": "build",
             "problemMatcher": {

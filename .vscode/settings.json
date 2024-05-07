@@ -55,6 +55,8 @@
         "solost.h": "c",
         "string.h": "c",
         "inet.h": "c",
-        "socket.h": "c"
-    }
-}
+        "socket.h": "c",
+        "list": "cpp",
+        "map": "cpp",
+        "sstream": "cpp"
+    }}
