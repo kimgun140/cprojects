@@ -58,5 +58,6 @@
         "socket.h": "c",
         "list": "cpp",
         "map": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "ctime": "cpp"
     }}
