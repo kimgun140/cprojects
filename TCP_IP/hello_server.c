@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     // 네트워크 바이트 순서로 저장
     // 멤버 sin_addr의 구조체 자료형 in_addr 사실상 32비트 정수자료형
     serv_addr.sin_port = htons(atoi(argv[1]));
-    // 32비트 ip주소 정보 저장
+    // 32비트 port주소 정보 저장
     // 네트워크 바이트 순서로 저장
     // 멤버 sin_addr의 구조체 자료형 in_addr 사실상 32비트 정수자료형
     // 주소 받기

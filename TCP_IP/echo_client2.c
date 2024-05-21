@@ -41,14 +41,18 @@ int main(int argc, char *argv[])
             break;
 
         str_len = write(sock, message, strlen(message));
-
+        //write가 성공하면 전달하는 데이터의 바이트 수를 반환한다. 
+        // 함수가 호출되면 데이터는 출력버퍼에 담긴다.
         recv_len = 0;
         while (recv_len < str_len)
         {
             recv_cnt = read(sock, &message[recv_len], BUF_SIZE - 1);
+            // 성공시 수신한 데이터의 바이트 수를 반환한다. 파일의 끝을 만나면 0반환
+            // 함수 호출되면 데이터는 입력버퍼에 저장된 데이터를 읽어 들이게 된다. 
             if (recv_cnt == -1)
                 error_handling("read() error!");
             recv_len += recv_cnt;
+            // 보낸 만큼 받아야 하기 때문에 일치할 때 while문을 벗어난다. 
         }
         message[recv_len] = 0;
         printf("Message from server: %s", message);
