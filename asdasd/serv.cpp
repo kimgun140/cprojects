@@ -77,9 +77,11 @@ void *handle_clnt(void *arg)
     char recv_msg[BUF_SIZE];
     char sendmsg[BUF_SIZE];
     std::string b_book;
+    std::string reslogstr = "";
 
     while (1)
     {
+        // std::string reslogstr;
         recv_msg[0] = 0;
         while ((str_len = read(clnt_sock, recv_msg, sizeof(recv_msg))) == -1)
             error_handling("read() error");
@@ -107,16 +109,24 @@ void *handle_clnt(void *arg)
             recv_msg[str_len] = 0;
             std::string pw(recv_msg);
 
+            if (reslogstr == "3") // 고유번호 수신
+            {
+                while ((str_len = read(clnt_sock, recv_msg, sizeof(recv_msg))) == -1)
+                    error_handling("read() error");
+                recv_msg[str_len] = 0;
+                std::string pnum(recv_msg);
+                // 여기서 틀리면 다시 브레이크 위로 보내야겠네 
+                a.Pnum_check(id,pw,pnum);
+
+                // 고유 번호 수신까지 했으니까
+            }
+
             pthread_mutex_lock(&mutx); // 뮤텍스 시작
             // db 확인
-            // 함수에서 int 리턴  // 로그인  성공시 0 반환, 아이디 부존재 시 1, 비밀번호 불일치 시 2 반환, 에러발생 시 9 반환
-            int res_log = a.LOGIN(id, pw);
-            if (res_log == 2)
-            {
-                a.LOGIN_FAILED(id);
-            }
-            pthread_mutex_unlock(&mutx); // 뮤텍스 종료
-            std::string reslogstr = to_string(res_log);
+            // 함수에서 int 리턴  // 로그인  성공시 0 반환, 아이디 부존재 시 1, 비밀번호 불일치 시 2 반환, 에러발생 시 9 반환 3일때 고유번호 입력 어디서 받으려고 했지 기억이 안나
+            int res_log = a.LOGIN(id, pw); // 여기서 5회이상 틀린거 검사해서 3을 반환 시키고  그 다음에 고유번호 입력받아야함
+            pthread_mutex_unlock(&mutx);   // 뮤텍스 종료
+            reslogstr = to_string(res_log);
             strcpy(sendmsg, reslogstr.c_str());
             sendmsg[strlen(reslogstr.c_str())] = 0;
             // 로그인 결과 송신
@@ -126,9 +136,12 @@ void *handle_clnt(void *arg)
             {
                 std::cout << "로그인 성공";
             }
+            // else if (res_log == 3){
+            //     //로그인 실패 5회 이상임
+            // }
             else // 로그인 실패
             {
-                // 실패하면 클라이언트에서 시작화면으로 돌아간다. 서버도 시작 부분으로 돌아가서 수신대기한다.
+                // 실패하면 클라이언트에서 시작화면으로 돌아간다. 서버도 시작 부분으로 돌아가
                 continue;
             }
         }

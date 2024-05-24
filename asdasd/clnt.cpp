@@ -62,12 +62,14 @@ void *recv_msg(void *arg) // read thread main
     int str_len;
     // std::string res_bb;
     char tempmsg[800000];
+    std::string res_log;
+
     while (1)
     {
         reset_msg(msg, BUF_SIZE);
         // 인트로
         intro();
-        // 인트로 선택(1로그인,2회원가입,3도서검색,4도서반납,q종료)
+        // 인트로 선택(1로그인,2회원가입,3채팅,4친구목록,q종료)
         std::string intro;
         getline(std::cin, intro);
         write(sock, intro.c_str(), strlen(intro.c_str()));
@@ -99,13 +101,24 @@ void *recv_msg(void *arg) // read thread main
             // pw 송신
             write(sock, pw.c_str(), strlen(pw.c_str()));
 
+            if (res_log == "3")
+            {
+                std::cout << " 고유번호: ";
+                std::string pnum;
+                getline(std::cin, pnum);
+                // pnum 송신
+                write(sock, pnum.c_str(), strlen(pw.c_str()));
+            }
+            //
+            // 이거 어디에 넣냐
+
             // 로그인 결과 수신
             while ((str_len = read(sock, msg, sizeof(msg))) == -1)
                 error_handling("read() error");
             msg[str_len] = 0;
 
             // 로그인 성공
-            std::string res_log(msg);
+            res_log = msg;
             if (res_log == "0")
             {
                 std::cout << "로그인 성공.\n";
@@ -118,6 +131,11 @@ void *recv_msg(void *arg) // read thread main
             else if (res_log == "2")
             {
                 std::cout << "로그인 실패: 비밀번호가 틀립니다.\n";
+                continue;
+            }
+            else if (res_log == "3")
+            {
+                std::cout << "로그인 실패: 5회이상 로그인에 실패 하셨습니다.\n";
                 continue;
             }
             else

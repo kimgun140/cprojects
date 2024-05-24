@@ -286,13 +286,19 @@ public:
             stmnt1->setString(1, id);
             sql::ResultSet *resid = stmnt1->executeQuery();
             // 로그인 5회이상인지 체크
-            sql::PreparedStatement *filed_count = m_connection->prepareStatement("SELECT CONNECTION_FAILED FROM USER WHERE ID = ?");
-            filed_count->setString(1, id);
-            sql::ResultSet *filed_count11 = filed_count->executeQuery();
-            filed_count11->next();
-                filed_count11->getInt(1); // 여기에 횟수가 담겨 있네?
-            if (resid->next())
+            sql::PreparedStatement *failed_count = m_connection->prepareStatement("SELECT CONNECTION_FAILED FROM USER WHERE ID = ?");
+            failed_count->setString(1, id);
+            sql::ResultSet *failed_count11 = failed_count->executeQuery();
+            failed_count11->next();
+            int try_check = failed_count11->getInt(1);
+
+            if (resid->next()) // 있으면 실행되니까 아이디 체크
             {
+                if (try_check >= 5)
+                {             
+                    return 3; // 실패횟수가 5이상임
+                }
+
                 // 비밀번호
                 sql::PreparedStatement *stmnt2 = m_connection->prepareStatement("SELECT PW FROM USER WHERE ID = ? AND PW = ?");
                 stmnt2->setString(1, id);
@@ -301,10 +307,13 @@ public:
                 if (respw->next()) // 값이 있으면 저게 실행이 되고 아니면 오류 나니까
                     return 0;      // 0 아이디 비번 일치
                 else
-                    return 2; // 2 비번 불일치
+                {
+                    LOGIN_FAILED(id); // 로그인 실패시 카운트 올라가게 만들었음
+                    return 2;         // 2 비번 불일치
+                }
             }
             else
-                return 1; // 1 아이디 부존재
+                return 1; // 1 아이디 없음
         }
         catch (sql::SQLException &e)
         {
@@ -315,6 +324,35 @@ public:
     // 아이디 중복 검사
     // 반환할때 중복아니면 1 중복이면 2 반환 그리고 다음 칸에 나온 아이디를 담아서 줘야지 id_check[1]에는 확인된 아이디가 담긴다.
     //  중복아닐때 a 중복일 때 b 오류는 c
+
+    int Pnum_check(std::string id, std::string pw, std::string pnum) // 고유번호 입력한 아이디랑 같은지 확인하는 거임 
+    {
+
+        try
+        {
+            // 로그인 5회이상인지 체크
+            sql::PreparedStatement *p_numbercheck = m_connection->prepareStatement("SELECT PRIMARY_NUMBER FROM USER WHERE ID = ?");
+            // 고유번호 몇번인지 아이디 통해서 확인
+            p_numbercheck->setString(1, id);
+            sql::ResultSet *p_numbercheck11 = p_numbercheck->executeQuery();
+            p_numbercheck11->next();
+            int p_check = p_numbercheck11->getInt(1); // db에서 나온 pnum이랑 입력한 pnum이랑 비교 ㄱㄱ
+            if (p_check == stoi(pnum))
+            {
+                // 여기서 통과 했으면 db의 로그인 실패 횟수 초기화 시켜주고 다음으로 넘어가서 로그인 함수로  값이 너머 가면 되니까 ㅇㅋ네
+                sql::PreparedStatement *p_numresset = m_connection->prepareStatement("UPDATE USER SET CONNECTION_FAILED = 0 WHERE ID =  ?");
+                // 고유번호 몇번인지 아이디 통해서 확인
+                p_numresset->setString(1, id);
+                p_numresset->executeQuery();
+            }
+        }
+        catch (sql::SQLException &e)
+        {
+            std::cerr << "Error selecting USER.pnum: " << e.what() << std::endl;
+        }
+        return 9;
+    }
+
     std::string SINGUP_IDcheck(std::string ID)
     {
         try
@@ -877,19 +915,19 @@ public:
         }
     }
     // 로그인 실패 5회 이상일 때
-    void LOGIN_FAILED(std::string ID)
-    // 로그인 실패시 카운트  5회 이상이면 로그인 다르게 하기
-    {
-        try
-        { // 로그인 실패시
-            sql::PreparedStatement *FL_COUNT = m_connection->prepareStatement("UPDATE USER SET CONNECTION_FAILED = USER.CONNECTION_FAILED + 1 where ID = ?");
-            //   update USER set CONNECTION_FAILED = USER.CONNECTION_FAILED + 1 where PRIMARY_NUMBER = '1'
-            FL_COUNT->setString(1, ID);
-            FL_COUNT->executeQuery();
-        }
-        catch (sql::SQLException &e)
-        {
-            std::cerr << "Error selecting LOGIN_FAILED: " << e.what() << std::endl;
-        }
-    }
+    // void LOGIN_FAILED(std::string ID)
+    // // 로그인 실패시 카운트  5회 이상이면 로그인 다르게 하기
+    // {
+    //     try
+    //     { // 로그인 실패시
+    //         sql::PreparedStatement *FL_COUNT = m_connection->prepareStatement("UPDATE USER SET CONNECTION_FAILED = USER.CONNECTION_FAILED + 1 where ID = ?");
+    //         //   update USER set CONNECTION_FAILED = USER.CONNECTION_FAILED + 1 where PRIMARY_NUMBER = '1'
+    //         FL_COUNT->setString(1, ID);
+    //         FL_COUNT->executeQuery();
+    //     }
+    //     catch (sql::SQLException &e)
+    //     {
+    //         std::cerr << "Error selecting LOGIN_FAILED: " << e.what() << std::endl;
+    //     }
+    // }
 };
