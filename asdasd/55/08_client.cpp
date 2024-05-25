@@ -427,7 +427,7 @@ void *generate_clnt(void *arg)
                     // 채팅창신설
                     else if (res == "1")
                     {
-                        std::cout<<"1번"<<std::endl;
+                        std::cout << "1번" << std::endl;
                         // break;
                     }
                     // 채팅창접속
@@ -436,33 +436,34 @@ void *generate_clnt(void *arg)
                         std::cout << "채팅" << std::endl;
                         // break;
 
-                     while(1){
-                        pthread_create(&snd_thread, NULL, send_msg, (void *)&sock);
-                        pthread_create(&rcv_thread, NULL, recv_msg, (void *)&sock);
-                        pthread_detach(snd_thread);
-                        pthread_detach(rcv_thread);
-                     }
+  
+                            std::cout <<"방입장"<<std::endl;
+                            pthread_create(&snd_thread, NULL, send_msg, (void *)&sock);
+                            pthread_create(&rcv_thread, NULL, recv_msg, (void *)&sock);
+                            pthread_detach(snd_thread);
+                            pthread_detach(rcv_thread);
+                            // std::string msg;
+                            // getline(std::cin, msg);
+                            // while ((msg = arriveMsg(sock)) != "Q")
+                            //     deliverMsg(sock,msg); // 여기
+                
                     }
                     // 친구관리
                     else if (res == "3")
                     {
-                        std::cout<<"3번"<<std::endl;
+                        std::cout << "3번" << std::endl;
                         // break;
-
-
                     }
                     // 계정관리
                     else if (res == "4")
                     {
-                        std::cout<<"4번"<<std::endl;
+                        std::cout << "4번" << std::endl;
                         // break;
-
-
                     }
                     // 기타
                     else if (res == "5")
                     {
-                        std::cout<<"5번"<<std::endl;
+                        std::cout << "5번" << std::endl;
                         // break;
 
                         // continue;
@@ -483,19 +484,6 @@ void *generate_clnt(void *arg)
             std::cout << "잘못된 입력입니다.\n";
             continue;
         }
-    }
-    return NULL;
-}
-
-void *recv_msg(void *arg) // read thread main
-{
-    int sock = *((int *)arg);
-    // char name_msg[NAME_SIZE+BUF_SIZE];
-    int str_len;
-    while (1)
-    {
-        std::string result = arriveMsg(sock);
-        std::cout << result << std::endl;
     }
     return NULL;
 }
@@ -523,6 +511,19 @@ void *recv_msg(void *arg) // read thread main
 //     return result;
 // }
 //
+
+void *recv_msg(void *arg) // read thread main
+{
+    int sock = *((int *)arg);
+    // char name_msg[NAME_SIZE+BUF_SIZE];
+    int str_len;
+    while (1)
+    {
+        std::string result = arriveMsg(sock);
+        std::cout << result << std::endl;
+    }
+    return NULL;
+}
 void *send_msg(void *arg) // send thread main
 {
     int sock = *((int *)arg);
@@ -531,10 +532,10 @@ void *send_msg(void *arg) // send thread main
         std::string msg;
         getline(std::cin, msg);
         if (msg == "q" || msg == "Q")
-        {
+        {   std::cout<< "채팅종료"<<std::endl;
             deliverMsg(sock, msg);
             break;
-            // close(sock);
+            close(sock);
             // exit(0);
         }
         // sprintf(name_msg,"%s %s", name, msg);

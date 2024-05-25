@@ -132,12 +132,12 @@ public:
     }
 
     // 리턴값: 로그인성공 시 0, 로그인실패 실패 횟수(1~5)
-    std::string check_login(std::string line, int sock)
+    std::string check_login(std::string line, int sock, std::string &id)
     {
         try
         {
             std::stringstream input(line);
-            std::string id;
+            // std::string id;
             std::string pw;
             getline(input, id, ',');
             getline(input, pw, ',');
@@ -246,12 +246,12 @@ public:
     }
 
     // 리턴값 성공: 0 || 실패: 1, 아이디부존재:2 비번틀림:3 고유번호오류:4 || 오류: 9
-    std::string check_SLogin(std::string line, int sock)
+    std::string check_SLogin(std::string line, int sock, std::string &id)
     {
         try
         {
             std::stringstream input(line);
-            std::string id, pw, num;
+            std::string pw, num;
             std::string cid, cpw, cnum;
             getline(input, id, ',');
             getline(input, pw, ',');
@@ -315,18 +315,24 @@ public:
         try
         {
             std::string result;
+            // 내 고유번호로 찾는다 내가 친구 신청을 했거나, 내가 친구를 신청을 받았는데 그 신청의 상태가 수락인(친구 상태인) 상대편(친구)의 id,nick,접속상태를 뽑아오는거네
             sql::PreparedStatement *stmnt = m_connection->prepareStatement("SELECT ID, NICK, STATUS FROM USER WHERE (STATUS = 1 OR STATUS = 0) AND NO IN (SELECT MATE.RECVID FROM MATE WHERE MATE.SENDID = ? AND MATE.STATUS = 1 UNION SELECT MATE.SENDID FROM MATE WHERE MATE.RECVID = ? AND MATE.STATUS = 1)");
             stmnt->setInt(1, user_no);
             stmnt->setInt(2, user_no);
             sql::ResultSet *res = stmnt->executeQuery();
+            //    std::cout << "call_mate_all_sub01 돌아가냐?"<<std::endl;
+
             while (res->next())
-            {
+            { // id/nick/status/\n 개행문자까지만 읽으니까 이걸 반복시키면 그 사람들을 다 끊어서 가져올 수 있겠네
+                // id/nick/status/
                 result.append((std::string)res->getString(1));
                 result.append(",");
                 result.append((std::string)res->getString(2));
                 result.append(",");
                 result.append(std::to_string(res->getInt(3)));
                 result.append("\n");
+                std::cout << result << std::endl;
+                std::cout << "result" << std::endl;
             }
             return result;
         }
@@ -337,18 +343,18 @@ public:
         return "e";
     }
 
-    // 전체 친구 목록 호출함수. 리턴값: 성공시 ','로 구분되는 친구들의 고유번호, 실패시 "fail", 버그시 "bug";
+    // 전체 친구 목록 호출함수. 리턴값: 성공시 ','로 구분되는 친구들의 고유번호,NICK,STATUS || 실패시 "fail", 버그시 "bug";
     std::string Call_Mate_all(std::string id)
     {
         try
         {
-            sql::PreparedStatement *stmn1 = m_connection->prepareStatement("SELECT NO FROM USER WHERE ID = ?");
+            sql::PreparedStatement *stmn1 = m_connection->prepareStatement("SELECT ID FROM USER WHERE ID = ?"); // 내....
             stmn1->setString(1, id);
             sql::ResultSet *res = stmn1->executeQuery();
             if (res->next())
             {
-                int user_no = res->getInt(1);
-                std::string mates = Call_mate_all_sub01(user_no);
+                int user_ID = res->getInt(1);
+                std::string mates = Call_mate_all_sub01(user_ID); // 고유번호를 매개변수로 주네
                 return mates;
             }
             else
@@ -363,21 +369,213 @@ public:
         return "bug";
     }
 
-
-    // 로그아웃  성공 1 오류 2
-    std::string Logout(std::string line)
+    // 친구신청 리턴값: 친구신청성공 Y, 아이디부존재 N, 이미신청혹은친구상태 n, db에러 E
+    std::string add_mate(const std::string id, const std::string mate_num)
     {
-
         try
         {
+            // 고유번호 존재여부 확인
+            sql::PreparedStatement *check = m_connection->prepareStatement("SELECT NO FROM USER WHERE ID = ?");
+            check->setInt(1, std::stoi(id));
+            sql::ResultSet *resCheck = check->executeQuery();
+            std::cout << "check1" << std::endl;
+            // 아이디 존재
+            if (resCheck->next())
+            {
+                std::cout << "check2" << std::endl;
 
-            std::stringstream input(line);
-            std::string id;
-            std::string pw;
-            getline(input, id, ',');
-            getline(input, pw, ',');
-            sql::PreparedStatement *stmnt = m_connection->prepareStatement("UPDATE  USER SET STATUS = 0 WHERE ID = ?");
-            sql::PreparedStatement *stmnt1 = m_connection->prepareStatement("UPDATE  USER SET FD = NULL WHERE ID = ?");
+                int userNo = resCheck->getInt(1);
+                // 이미 신청였거나 이미 친구상태인지 확인 1친구 -1 대기 0 친구아님 거부
+                // 이거 하면 나오는게 뭐냐면 status 가 0인걸 찾는거임           그래서 0이면 친구 신청이 거부된거임 카운트가 있으면 친구
+                // status가 -1이 있으면 친구 추가가 되네
+                sql::PreparedStatement *stmnt = m_connection->prepareStatement("SELECT COUNT(*) FROM MATE WHERE (SENDID = ? AND RECVID = ? AND (STATUS != -1 AND STATUS != 1)) OR (RECVID = ? AND SENDID = ? AND (STATUS != -1 AND STATUS != 1))");
+                stmnt->setInt(1, userNo);
+                stmnt->setInt(2, std::stoi(mate_num));
+                stmnt->setInt(3, userNo);
+                stmnt->setInt(4, std::stoi(mate_num));
+                sql::ResultSet *res = stmnt->executeQuery();
+                if (res->next() && userNo != std::stoi(mate_num))
+                {
+                    std::cout << "check3" << std::endl;
+                    int checker2 = res->getInt(1);
+                    // 이미 친구신청 중이거나 친구인 상태
+                    if (checker2 == 0)
+                    {
+                        std::cout << "check4" << std::endl;
+                        return "n";
+                    }
+                    // 친구 신청이 가능한 상태
+                    else if (checker2 == 1)
+                    {
+                        std::cout << "check5" << std::endl;
+
+                        sql::PreparedStatement *stmnt2 = m_connection->prepareStatement("INSERT INTO MATE (SENDID, RECVID) VALUES (?, ?)");
+                        stmnt2->setInt(1, userNo);
+                        stmnt2->setInt(2, std::stoi(mate_num));
+                        stmnt2->executeQuery();
+                        return "Y";
+                    }
+                    // 에러
+                    else
+                    {
+                        std::cout << "check6" << std::endl;
+
+                        return "e";
+                    }
+                }
+                // 아이디 부존재(0)
+                else
+                {
+                    std::cout << "check7" << std::endl;
+
+                    return "N";
+                }
+            }
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "친구추가 중 에러" << e.what() << '\n';
+        }
+        return "e";
+    }
+    // 친구 삭제
+    std::string Erase_Mate(const std::string id, const std::string FID)
+    {
+        try
+        {
+            sql::PreparedStatement *stmnt = m_connection->prepareStatement("SELECT A.NO FROM USER AS A WHERE A.ID = ? UNION SELECT B.NO FROM USER AS B WHERE B.ID = ?");
+            stmnt->setString(1, id);
+            stmnt->setString(2, FID);
+            sql::ResultSet *res = stmnt->executeQuery();
+
+            int user_no, fri_no;
+
+            if (res->next())
+                user_no = res->getInt(1);
+            else
+                return "e";
+
+            if (res->next())
+                fri_no = res->getInt(1);
+            else
+                return "e";
+
+            sql::PreparedStatement *stmnt2 = m_connection->prepareStatement("UPDATE MATE SET STATUS = 0 WHERE (SENDID = ? AND RECVID = ? AND STATUS = 1) OR (SENDID = ? AND RECVID = ? AND STATUS = 1)");
+
+            stmnt2->setInt(1, user_no);
+            stmnt2->setInt(2, fri_no);
+            stmnt2->setInt(3, fri_no);
+            stmnt2->setInt(4, user_no);
+
+            stmnt2->executeQuery();
+
+            sql::PreparedStatement *stmnt3 = m_connection->prepareStatement("SELECT ROW_COUNT()");
+            sql::ResultSet *res2 = stmnt3->executeQuery();
+            res2->next();
+            int result = res2->getInt(1);
+            if (result == 1)
+                return "Y";
+            else
+                return "e";
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "친구 삭제 중 오류: " << e.what() << '\n';
+            return "e";
+        }
+        return "Y";
+    }
+
+    // 친구 요청을 한 유저정보 반환 실패시:e
+    std::string Call_requestMate(std::string user_id)
+    {
+        std::string result = "";
+        std::cout << "Call_requestMate1" << std::endl;
+        
+        try
+        {
+            sql::PreparedStatement *stmnt0 = m_connection->prepareStatement("SELECT NO FROM USER WHERE ID = ?");
+            stmnt0->setString(1, user_id);
+            sql::ResultSet *res0 = stmnt0->executeQuery();
+            res0->next();
+            int user_no = res0->getInt(1);
+            std::cout << "Call_requestMate2" << std::endl;
+
+            sql::PreparedStatement *stmnt1 = m_connection->prepareStatement("SELECT NO, NICK FROM USER WHERE USER.ID IN(SELECT SENDID FROM MATE WHERE RECVID = ? AND STATUS = -1)");
+            stmnt1->setString(1, user_id);
+            sql::ResultSet *res1 = stmnt1->executeQuery();
+            while (res1->next())
+            {
+                std::cout << "Call_requestMate3" << std::endl;
+                result.append(std::to_string(res1->getInt(1)));
+                result.append(",");
+                result.append(std::string(res1->getString(2)));
+                result.append("\n");
+            }
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "친구 요청 확인 중 오류: " << e.what() << '\n';
+            return "e";
+        }
+        return result;
+    }
+
+    // 친구 요청 승락
+    void accept_mate(std::string user_id, std::string sender)
+    {
+        try
+        {
+            sql::PreparedStatement *stmnt0 = m_connection->prepareStatement("SELECT NO FROM USER WHERE ID = ?");
+            stmnt0->setString(1, user_id);
+            sql::ResultSet *res0 = stmnt0->executeQuery();
+            res0->next();
+            int userNo = res0->getInt(1);
+            int sendNo = std::stoi(sender);
+            if (userNo != sendNo)
+            {
+                sql::PreparedStatement *stmnt = m_connection->prepareStatement("UPDATE MATE SET STATUS = 1 WHERE SENDID = ? AND RECVID = ?");
+                stmnt->setInt(1, sendNo);
+                stmnt->setInt(2, userNo);
+                stmnt->executeQuery();
+            }
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "친구요청승락 중 오류: " << e.what() << '\n';
+        }
+    }
+    // 친구 요청 거부
+    void deny_mate(std::string user_id, std::string sender)
+    {
+        try
+        {
+            sql::PreparedStatement *stmnt0 = m_connection->prepareStatement("SELECT NO FROM USER WHERE ID = ?");
+            stmnt0->setString(1, user_id);
+            sql::ResultSet *res0 = stmnt0->executeQuery();
+            res0->next();
+            int userNo = res0->getInt(1);
+            if (userNo != std::stoi(sender))
+            {
+                sql::PreparedStatement *stmnt = m_connection->prepareStatement("UPDATE MATE SET STATUS = 0 WHERE SENDID = ? AND RECVID = ?");
+                stmnt->setInt(1, std::stoi(sender));
+                stmnt->setInt(2, userNo);
+                stmnt->executeQuery();
+            }
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "친구요청거부 중 오류: " << e.what() << '\n';
+        }
+    }
+
+    //  로그아웃  성공 1 오류 2
+    std::string Logout(std::string id)
+    {
+        try
+        {
+            sql::PreparedStatement *stmnt = m_connection->prepareStatement("UPDATE USER SET STATUS = 0 WHERE ID = ?");
+            sql::PreparedStatement *stmnt1 = m_connection->prepareStatement("UPDATE USER SET FD = NULL WHERE ID = ?");
 
             stmnt->setString(1, id);
             stmnt1->setString(1, id);
@@ -391,38 +589,4 @@ public:
         }
         return "1";
     }
-
-
- std::string F_list(std::string line)
-    {
-
-        try
-        {
-            std::vector<std::string> asd;
-            std::stringstream input(line);
-            std::string id;
-            std::string pw;
-            getline(input, id, ',');
-            getline(input, pw, ',');
-            sql::PreparedStatement *stmnt = m_connection->prepareStatement("SELECT NICK, FD, ID FROM USER WHERE ID = ?");
-            stmnt->setString(1, id);
-            sql::ResultSet *res = stmnt->executeQuery();
-            res->next();
-            asd.push_back((std::string)(res->getString(1)));
-            asd.push_back(std::to_string(res->getInt(2)));
-            asd.push_back((std::string)res->getString(3));
-
-
-
-
-        }
-        catch (sql::SQLException &e)
-        {
-            std::cerr << "Error selecting USER: " << e.what() << std::endl;
-            return "2"; // 오류
-        }
-        return "1";
-    }
-
-    
 };
